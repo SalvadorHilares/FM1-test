@@ -11,9 +11,61 @@ Implementar la clase LinkedList, definiendo los siguientes métodos:
   En caso de que la búsqueda no arroje resultados, search debe retornar null.
 */
 
-function LinkedList() {}
+class Node {
+  constructor(value){
+    this.value = value;
+    this.next = null;
+  }
+};
 
-function Node(value) {}
+
+class LinkedList{
+  constructor(){
+    this.head = null;
+    this.nodes = 0;
+  }
+  add(value){
+    var nodo = new Node(value);
+    nodo.next = null;
+    if(this.head == null) this.head = nodo;
+    else{
+        var temp = this.head;
+        while(temp.next != null)
+            temp = temp.next;
+        temp.next = nodo;
+    }
+    this.nodes++;
+  }
+  remove(){
+    if(this.head == null) return false;
+    if(this.head.next == null){
+      var data = this.head.value;
+      this.head = null;
+      this.nodes--;
+      return data;
+    }else{
+      var temp = this.head;
+      while(temp.next.next != null)
+          temp = temp.next;
+      data = temp.next.value;
+      temp.next = null;
+      this.nodes--;
+      return data;
+    }
+  }
+  search(value){
+    var temp = this.head;
+    while(temp != null){
+      if(typeof(value) == "function"){
+        var data = value(temp.value);
+        if(data) return temp.value;
+      }
+      if(temp.value == value) return temp.value;
+      temp = temp.next;
+    }
+    return null;
+  }
+};
 
 /*
 Implementar la clase HashTable.
@@ -30,7 +82,28 @@ La clase debe tener los siguientes métodos:
 Ejemplo: supongamos que quiero guardar {instructora: 'Ani'} en la tabla. Primero puedo chequear, con hasKey, si ya hay algo en la tabla con el nombre 'instructora'; luego, invocando set('instructora', 'Ani'), se almacenará el par clave-valor en un bucket específico (determinado al hashear la clave)
 */
 
-function HashTable() {}
+class HashTable{
+  constructor(){
+    this.array = new Object;
+    this.numBuckets = 35;
+  }
+  hash(str){
+    if(typeof(str) != "string") return false;
+    let sum = 0;
+    for(let i=0; i<str.length; i++) sum += str.charCodeAt(i);
+    return Math.floor(sum%this.numBuckets);
+  }
+  set(str1, str2){
+    if(!this.hash(str1)) throw new TypeError("Keys must be strings");
+    this.array[str1] = str2;
+  }
+  get(key){
+    return this.array[key];
+  }
+  hasKey(key){
+    return this.array.hasOwnProperty(key);
+  }
+};
 
 // No modifiquen nada debajo de esta linea
 // --------------------------------
